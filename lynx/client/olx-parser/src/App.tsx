@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { use, useRef } from 'react';
 
 import './App.css';
 import {
@@ -15,7 +15,7 @@ const App = () => {
         res.json(),
       ),
   })
-  
+  const text = useRef()
   if (isPending) return 'Loading...'
 
   if (error) return 'An error has occurred: ' + error.message
@@ -26,7 +26,7 @@ const App = () => {
     return (
       <div>
         <div>
-        <img src={element.image} className="element_image" />
+        <a href={element.href}className="element_image"  target="_blank"><img src={element.image} className="element_image" /> </a>
         </div>
         <div>
         <span>{element.title}</span>
@@ -41,8 +41,17 @@ const App = () => {
     )
   }
 
+const handleChangeText = (value: any) => {
+  text.current = value.nativeEvent.target.value
+}
+const handleClick = (value: any) => { fetch(`http://127.0.0.1:3030/flats?price=${text.current}`).then((res) =>
+        res.json(),
+      )
+}
   return (
     <div>
+      <button onClick={handleClick}className="element_image"  />
+      <input onChange={handleChangeText}/>
       {data.map(renderElement)}
     </div>
   )
